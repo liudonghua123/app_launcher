@@ -1,0 +1,4 @@
+app: app/Chrome/chrome.exe
+arguments:
+  - --user-data-dir=User Data
+  - --disable-gpu

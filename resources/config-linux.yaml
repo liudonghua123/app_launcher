@@ -1,0 +1,4 @@
+app: app/Chrome/usr/bin/google-chrome-stable
+arguments:
+  - --user-data-dir=User Data
+  - --disable-gpu

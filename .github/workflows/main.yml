@@ -18,12 +18,15 @@ jobs:
           - os: ubuntu-latest
             output-name: ${GITHUB_REPOSITORY##*/}-linux
             package-name: ${GITHUB_REPOSITORY##*/}-linux
+            config-name: resources/config-linux.yaml
           - os: macOS-latest
             output-name: ${GITHUB_REPOSITORY##*/}-mac
             package-name: ${GITHUB_REPOSITORY##*/}-mac
+            config-name: resources/config-macos.yaml
           - os: windows-latest
             output-name: ${GITHUB_REPOSITORY##*/}-windows.exe
             package-name: ${GITHUB_REPOSITORY##*/}-windows
+            config-name: resources/config-windows.yaml
 
     steps:
       - uses: actions/checkout@v1
@@ -53,7 +56,7 @@ jobs:
           mkdir -p ${GITHUB_REPOSITORY##*/}/app/
           # copy resources
           cp build/* ${GITHUB_REPOSITORY##*/}/
-          cp config.yaml ${GITHUB_REPOSITORY##*/}/
+          cp ${{ matrix.config-name }} ${GITHUB_REPOSITORY##*/}/config.yaml
           # use 7z to package the distribution
           7z a -tzip ${{ matrix.package-name }}.zip ${GITHUB_REPOSITORY##*/} -bb3
         shell: bash
