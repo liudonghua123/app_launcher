@@ -19,14 +19,20 @@ jobs:
             output-name: ${GITHUB_REPOSITORY##*/}-linux
             package-name: ${GITHUB_REPOSITORY##*/}-linux
             config-name: resources/config-linux.yaml
+            pub: pub
+            dart: dart
           - os: macOS-latest
             output-name: ${GITHUB_REPOSITORY##*/}-mac
             package-name: ${GITHUB_REPOSITORY##*/}-mac
             config-name: resources/config-macos.yaml
+            pub: pub
+            dart: dart
           - os: windows-latest
             output-name: ${GITHUB_REPOSITORY##*/}-windows.exe
             package-name: ${GITHUB_REPOSITORY##*/}-windows
             config-name: resources/config-windows.yaml
+            pub: pub.bat
+            dart: dart.exe
 
     steps:
       - uses: actions/checkout@v1
@@ -34,18 +40,10 @@ jobs:
       - name: Setup Dart VM
         uses: vanesyan/setup-dart@v1
 
-      - name: Build for windows
-        if: matrix.os == 'windows-latest'
+      - name: Build
         run: |
-          pub.bat get
-          dart.exe tool/grind.dart clean build
-        shell: bash
-
-      - name: Build for non-windows
-        if: matrix.os != 'windows-latest'
-        run: |
-          pub get
-          dart tool/grind.dart clean build
+          ${{ matrix.pub }} get
+          ${{ matrix.dart }} tool/grind.dart clean build
         shell: bash
 
       - name: Prepare release files
@@ -57,6 +55,41 @@ jobs:
           # copy resources
           cp build/* ${GITHUB_REPOSITORY##*/}/
           cp ${{ matrix.config-name }} ${GITHUB_REPOSITORY##*/}/config.yaml
+        shell: bash
+
+      - name: Prepare windows chrome app
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd resources
+          7z x 49.0.2623.112_chrome_installer.exe chrome.7z -bb3
+          7z x chrome.7z -oChrome -bb3
+          cp -r Chrome/Chrome-bin ../${GITHUB_REPOSITORY##*/}/app/
+          cd ..
+        shell: bash
+
+      - name: Prepare linux chrome app
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd resources
+          7z x chrome64_53.0.2785.116.deb data.tar -bb3
+          7z x data.tar -oChrome -bb3
+          cp -r Chrome ../${GITHUB_REPOSITORY##*/}/app/
+          cd ..
+        shell: bash
+
+      - name: Prepare macos chrome app
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd resources
+          hdiutil attach chrome_53.0.2785.116.dmg -verbose
+          cp -r /Volumes/Google\ Chrome/Google\ Chrome.app ../${GITHUB_REPOSITORY##*/}/app/
+          hdiutil detach /Volumes/Google\ Chrome -verbose
+          cd ..
+        shell: bash
+
+      - name: Package the distribution
+        run: |
+          pwd
           # use 7z to package the distribution
           7z a -tzip ${{ matrix.package-name }}.zip ${GITHUB_REPOSITORY##*/} -bb3
         shell: bash
