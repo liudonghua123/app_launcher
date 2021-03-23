@@ -18,7 +18,7 @@ void main(List<String> arguments) {
     ),
   );
   logger.i('workingDirectory: $workingDirectory');
-  var configFile = File('config.yaml');
+  var configFile = File(path.join(workingDirectory, 'config.yaml'));
   if (!configFile.existsSync()) {
     logger.e('config.yaml file not found!');
     exit(-1);
