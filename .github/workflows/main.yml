@@ -63,7 +63,7 @@ jobs:
           cd resources
           7z x 49.0.2623.112_chrome_installer.exe chrome.7z -bb3
           7z x chrome.7z -oChrome -bb3
-          cp -r Chrome/Chrome-bin ../${GITHUB_REPOSITORY##*/}/app/
+          cp -r Chrome/Chrome-bin ../${GITHUB_REPOSITORY##*/}/app/Chrome
           cd ..
         shell: bash
 
