@@ -15,6 +15,8 @@ Old version of chromes were downloaded from [Google Chrome Older Versions Downlo
 3. Modify the configs according to your environment (Optional).
 4. Double click `app_launcher` to run.
 
+**For MacOS users**: You need to unlock the zip file before extract it because if you does not unlock it, you will not allowed to execute the binary. You can unlock it by executing `xattr -d com.apple.quarantine app_launcher-mac.zip` command in your terminal.
+
 **For Linux users**: You may encounter some chrome crash problems like `libXss.so.1,libappindicator3.so.1 not found` due to the lack of some needed packages. For example, you need to install `libXScrnSaver`, `libappindicator3-gtk3`, `redhat-lsb` using `sudo yum install libXScrnSaver libappindicator3-gtk3 redhat-lsb` in redhat/centos/fedora linux before execute `app_launcher`. For other linux distributions, similar steps maybe needed.
 
 ## What's next
@@ -29,6 +31,8 @@ Old version of chromes were downloaded from [Google Chrome Older Versions Downlo
 2. https://www.unixmen.com/fix-google-chrome-stable-depends-libxss1-error/
 3. https://blog.csdn.net/f1370335844/article/details/80460071
 4. https://blog.csdn.net/pyCrawler/article/details/92766664
+5. https://superuser.com/questions/28384/what-should-i-do-about-com-apple-quarantine
+6. https://stackoverflow.com/questions/46198557/understanding-output-of-xattr-p-com-apple-quarantine
 
 ## License
 
